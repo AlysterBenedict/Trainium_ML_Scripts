@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Fitness Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* A light gray background */
+        }
+        .architecture-component {
+            background-color: white;
+            border: 1px solid #e2e8f0; /* Lighter border */
+            border-radius: 0.75rem; /* Rounded corners */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .architecture-component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .component-item {
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
+        }
+        .arrow {
+            color: #94a3b8; /* A muted gray for arrows */
+        }
+    </style>
+</head>
+<body class="p-8">
+
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-800">AI-Powered Fitness Coach</h1>
+        <p class="text-lg text-gray-500 mt-2">High-Level System Architecture</p>
+    </div>
+
+    <!-- Container for the 1x5 layout -->
+    <div class="flex flex-col lg:flex-row justify-center items-center">
+
+        <!-- Component 1: Python ML Prototype -->
+        <div class="architecture-component p-6 w-full lg:w-1/5">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4 text-center">
+                <span class="text-blue-500 mr-2">&#9679;</span> Python ML Prototype
+            </h2>
+            <div class="space-y-3">
+                <div class="component-item p-3 text-center text-gray-600">Webcam Video Feed</div>
+                <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[OpenCV] Image Proc.</div>
+                <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[MediaPipe] Pose Est.</div>
+                <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[NumPy] Angle Calc.</div>
+                <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[pyttsx3] Audio Fdbk.</div>
+            </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="hidden lg:flex items-center arrow text-4xl mx-4">&rarr;</div>
+
+        <!-- Component 2: Android Application -->
+        <div class="architecture-component p-6 w-full lg:w-1/5">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4 text-center">
+                <span class="text-green-500 mr-2">&#9679;</span> Android Application
+            </h2>
+            <div class="space-y-3">
+                <div class="component-item p-3 text-center text-gray-600">CameraX Feed</div>
+                <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[TensorFlow Lite] Pose Estimation</div>
+                 <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[Kotlin Coroutines] Angle Calc & Form Logic</div>
+                 <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[TTS Engine] Audio Fdbk.</div>
+                 <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[UI] Visual Guides</div>
+            </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="hidden lg:flex items-center arrow text-4xl mx-4">&rarr;</div>
+
+        <!-- Component 3: Wear OS App -->
+        <div class="architecture-component p-6 w-full lg:w-1/5">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4 text-center">
+                <span class="text-gray-500 mr-2">&#9679;</span> Wear OS App
+            </h2>
+            <div class="space-y-3">
+                <div class="component-item p-3 text-center text-gray-600">[Sensor Data] Heart Rate, Calories</div>
+                <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">Data Sync</div>
+            </div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="hidden lg:flex items-center arrow text-4xl mx-4">&rarr;</div>
+
+        <!-- Component 4: Firebase Backend -->
+        <div class="architecture-component p-6 w-full lg:w-1/5">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4 text-center">
+                <span class="text-yellow-500 mr-2">&#9679;</span> Firebase Backend
+            </h2>
+            <div class="space-y-3">
+                <div class="component-item p-3 text-center text-gray-600">[Firebase Auth] User Login/Signup</div>
+                <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">[Cloud Firestore] User Data, Biometrics, Workout Plans</div>
+            </div>
+        </div>
+        
+        <!-- Arrow -->
+        <div class="hidden lg:flex items-center arrow text-4xl mx-4">&rarr;</div>
+        
+        <!-- Component 5: Personalized Workout Gen. -->
+        <div class="architecture-component p-6 w-full lg:w-1/5">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4 text-center">
+                <span class="text-indigo-500 mr-2">&#9679;</span> Personalized Workout Gen.
+            </h2>
+            <div class="space-y-3">
+                 <div class="component-item p-3 text-center text-gray-600">(ML Model Logic)</div>
+                <div class="text-center arrow text-2xl">&darr;</div>
+                <div class="component-item p-3 text-center text-gray-600">User Profile & Biometrics</div>
+                 <div class="text-center arrow text-2xl">&harr;</div>
+                <div class="component-item p-3 text-center text-gray-600">Workout History & Progress</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
+

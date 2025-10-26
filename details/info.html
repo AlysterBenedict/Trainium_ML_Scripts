@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Fitness Coach: System Architecture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .flow-arrow {
+            color: #4ECDC4;
+            font-size: 2.5rem;
+            line-height: 1;
+            text-align: center;
+        }
+        .flow-card {
+            border-color: #4ECDC4;
+            transition: all 0.3s ease-in-out;
+        }
+        .flow-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-[#F7FFF7]">
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#1A535C] mb-2">AI-Powered Fitness Coach</h1>
+            <p class="text-lg md:text-xl text-[#1A535C]/80">An Interactive Overview of the System Architecture and Workflow</p>
+        </header>
+
+        <main class="space-y-12">
+            <section id="introduction" class="text-center bg-white rounded-lg shadow-md p-8">
+                <h2 class="text-3xl font-bold text-[#1A535C] mb-4">Revolutionizing Personal Fitness</h2>
+                <p class="max-w-3xl mx-auto text-[#1A535C]/90 mb-6">This project combines computer vision, machine learning, and cloud technology to create a smart fitness companion. The system provides real-time exercise form correction and personalized workout plans, all tracked and managed through a seamless mobile and wearable experience.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-[#4ECDC4] text-white p-6 rounded-lg">
+                        <div class="text-4xl font-bold">33</div>
+                        <div class="text-lg">Body Landmarks Tracked</div>
+                    </div>
+                    <div class="bg-[#45B7D1] text-white p-6 rounded-lg">
+                        <div class="text-4xl font-bold">100%</div>
+                        <div class="text-lg">Personalized Plans</div>
+                    </div>
+                    <div class="bg-[#FF6B6B] text-white p-6 rounded-lg">
+                        <div class="text-4xl font-bold">Real-Time</div>
+                        <div class="text-lg">Corrective Feedback</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="workflow">
+                <h2 class="text-3xl font-bold text-center text-[#1A535C] mb-8">Core System Workflow</h2>
+                <div class="p-6 md:p-10 bg-white rounded-lg shadow-md">
+                    <div class="flex flex-col items-center">
+                        <div class="w-full max-w-4xl">
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+                                <div class="flow-card text-center bg-[#F7FFF7] p-4 rounded-lg border-2">
+                                    <div class="text-5xl mb-2">📱</div>
+                                    <h3 class="font-semibold text-[#1A535C]">1. User Starts Workout</h3>
+                                    <p class="text-sm text-[#1A535C]/80">User selects an exercise in the Android app.</p>
+                                </div>
+                                <div class="flow-arrow hidden md:block">&#8594;</div>
+                                <div class="flow-arrow block md:hidden self-center my-2">&#8595;</div>
+
+                                <div class="flow-card text-center bg-[#F7FFF7] p-4 rounded-lg border-2">
+                                    <div class="text-5xl mb-2">📸</div>
+                                    <h3 class="font-semibold text-[#1A535C]">2. Camera Captures Video</h3>
+                                    <p class="text-sm text-[#1A535C]/80">The device camera streams video to the on-device ML model.</p>
+                                </div>
+                                <div class="flow-arrow hidden md:block">&#8594;</div>
+                                 <div class="flow-arrow block md:hidden self-center my-2">&#8595;</div>
+
+                                <div class="flow-card text-center bg-[#F7FFF7] p-4 rounded-lg border-2">
+                                    <div class="text-5xl mb-2">🧠</div>
+                                    <h3 class="font-semibold text-[#1A535C]">3. Real-Time Pose Analysis</h3>
+                                    <p class="text-sm text-[#1A535C]/80">MediaPipe detects landmarks; custom logic calculates angles.</p>
+                                </div>
+                                <div class="flow-arrow hidden md:block">&#8594;</div>
+                                 <div class="flow-arrow block md:hidden self-center my-2">&#8595;</div>
+
+                                <div class="flow-card text-center bg-[#F7FFF7] p-4 rounded-lg border-2">
+                                    <div class="text-5xl mb-2">🔊</div>
+                                    <h3 class="font-semibold text-[#1A535C]">4. Instant Feedback</h3>
+                                    <p class="text-sm text-[#1A535C]/80">The app gives audio & visual cues to correct the user's form.</p>
+                                </div>
+                                 <div class="flow-arrow hidden md:block">&#8594;</div>
+                                 <div class="flow-arrow block md:hidden self-center my-2">&#8595;</div>
+
+                                <div class="flow-card text-center bg-[#F7FFF7] p-4 rounded-lg border-2">
+                                    <div class="text-5xl mb-2">☁️</div>
+                                    <h3 class="font-semibold text-[#1A535C]">5. Data Sync to Cloud</h3>
+                                    <p class="text-sm text-[#1A535C]/80">Workout data & biometrics are saved to Firebase.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="architecture-details">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-2xl font-bold text-[#1A535C] mb-4">On-Device Intelligence</h3>
+                        <p class="text-[#1A535C]/90 mb-6">The core of the real-time feedback loop runs directly on the user's device for maximum speed and privacy. The process involves capturing video, running a sophisticated pose estimation model, and applying custom exercise logic to analyze the user's form instantly.</p>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gray-100 rounded-lg">
+                                <h4 class="font-semibold text-[#1A535C]">MediaPipe Pose Landmarker</h4>
+                                <p class="text-sm text-[#1A535C]/80">A TFLite model that processes video frames to detect 33 key body landmarks.</p>
+                            </div>
+                            <div class="p-4 bg-gray-100 rounded-lg">
+                                <h4 class="font-semibold text-[#1A535C]">Exercise Logic Module</h4>
+                                <p class="text-sm text-[#1A535C]/80">Calculates joint angles from landmark data and compares them against correct form models.</p>
+                            </div>
+                            <div class="p-4 bg-gray-100 rounded-lg">
+                                <h4 class="font-semibold text-[#1A535C]">Feedback Generator</h4>
+                                <p class="text-sm text-[#1A535C]/80">Triggers audio cues and visual overlays based on the form analysis.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-2xl font-bold text-[#1A535C] mb-4">Cloud Data Composition</h3>
+                        <p class="text-[#1A535C]/90 mb-6">All user data is securely stored and managed in Google's Cloud Firestore. This central database enables progress tracking, workout history, and synchronization across devices. The data is structured to support the app's core features.</p>
+                        <div class="chart-container">
+                            <canvas id="firestoreDataChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tech-stack">
+                <h2 class="text-3xl font-bold text-center text-[#1A535C] mb-8">Team Roles & Technology Stack</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-[#1A535C] mb-1">Alyster</h3>
+                        <p class="font-semibold text-[#45B7D1] mb-4">Machine Learning Lead</p>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Primary Tool:</strong> Python</li>
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Core Libs:</strong> MediaPipe, OpenCV, NumPy</li>
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Focus:</strong> Prototyping pose estimation and exercise logic.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-[#1A535C] mb-1">Vijay</h3>
+                        <p class="font-semibold text-[#45B7D1] mb-4">Android App Lead</p>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Primary Tool:</strong> Kotlin & Android Studio</li>
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Core Libs:</strong> CameraX, TFLite Vision</li>
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Focus:</strong> Building the UI and integrating the ML model.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-[#1A535C] mb-1">Ajit</h3>
+                        <p class="font-semibold text-[#45B7D1] mb-4">Backend & Features Lead</p>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Primary Tool:</strong> Firebase Console</li>
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Core Services:</strong> Auth, Cloud Firestore</li>
+                            <li class="flex items-start"><span class="text-[#4ECDC4] mr-2">&#10148;</span><strong class="font-semibold w-24 shrink-0">Focus:</strong> User data management and cloud persistence.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <script>
+        function wrapLabel(label, maxWidth) {
+            if (label.length <= maxWidth) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + word).length > maxWidth) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            } else {
+                return label;
+            }
+        };
+
+        const firestoreCtx = document.getElementById('firestoreDataChart').getContext('2d');
+        const firestoreDataChart = new Chart(firestoreCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['User Profiles & Goals', 'Workout History Logs', 'Biometric Data Syncs'],
+                datasets: [{
+                    label: 'Data Distribution',
+                    data: [40, 35, 25],
+                    backgroundColor: [
+                        '#FF6B6B',
+                        '#4ECDC4',
+                        '#45B7D1'
+                    ],
+                    borderColor: '#F7FFF7',
+                    borderWidth: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#1A535C',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    </script>
+</body>
+</html>

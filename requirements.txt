@@ -1,0 +1,21 @@
+# Core Machine Learning Framework (CUDA 12.1)
+torch==2.5.1
+torchvision==0.20.1
+torchaudio==2.5.1
+
+# Data Handling and Numerical Operations
+pandas==2.2.2
+numpy==1.26.4
+
+# Machine Learning Utilities
+scikit-learn==1.5.0
+joblib==1.4.2
+
+# UI and Visualization
+gradio==4.37.2
+tqdm==4.66.4
+matplotlib==3.9.0
+
+# Computer Vision (Pose Estimation)
+mediapipe==0.10.14
+opencv-python==4.10.0.84
