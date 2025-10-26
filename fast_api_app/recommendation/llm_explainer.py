@@ -8,10 +8,11 @@ def get_workout_narrative(structured_plan, user_profile):
     Uses Groq's LLM to generate a detailed, friendly explanation of the workout plan.
     """
     try:
-        api_key = "REDACTED-GROQ-KEY"
+        # Load API key from environment variable instead of hardcoding it
+        api_key = os.environ.get("GROQ_API_KEY")
         if not api_key:
             raise ValueError("GROQ_API_KEY environment variable not set.")
-            
+
         client = Groq(api_key=api_key)
     except Exception as e:
         return f"Error initializing Groq client: {e}"

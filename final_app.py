@@ -302,7 +302,10 @@ def get_ai_narrative(user_profile, workout_plan_df, progress=gr.Progress()):
     try:
         progress(0.5, desc="Generating detailed guide...")
 
-        api_key = "REDACTED-GROQ-KEY"
+        # Load API key from environment variable instead of hardcoding it
+        api_key = os.environ.get("GROQ_API_KEY")
+        if not api_key:
+            raise gr.Error("GROQ_API_KEY environment variable not set.")
         client = Groq(api_key=api_key)
         
         chat_completion = client.chat.completions.create(
