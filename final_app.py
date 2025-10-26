@@ -81,7 +81,7 @@ VISION_MODEL_TARGET_COLUMNS = [
 ]
 NUM_TARGETS = len(VISION_MODEL_TARGET_COLUMNS)
 vision_model = BodyM_MetricEstimator(num_measurements=NUM_TARGETS)
-vision_model.load_state_dict(torch.load('best_bodym_model.pth', map_location=DEVICE, weights_only=True))
+vision_model.load_state_dict(torch.load('fast_api_app/best_bodym_model.pth', map_location=DEVICE, weights_only=True))
 vision_model.to(DEVICE)
 vision_model.eval()
 print("✅ Biometric Model loaded.")
@@ -135,16 +135,16 @@ class WorkoutGenerationTransformer(nn.Module):
         output = self.fc_out(transformer_output).view(src_profile.shape[0], 30, self.max_exercises, self.vocab_size)
         return output
 
-workout_scaler = joblib.load('scaler.pkl')
-workout_encoder = joblib.load('encoder.pkl')
-workout_tokenizer = PyTorchTokenizer.load_tokenizer('tokenizer.json')
+workout_scaler = joblib.load('fast_api_app/scaler.pkl')
+workout_encoder = joblib.load('fast_api_app/encoder.pkl')
+workout_tokenizer = PyTorchTokenizer.load_tokenizer('fast_api_app/tokenizer.json')
 VOCAB_SIZE = workout_tokenizer.vocab_size
 INPUT_DIM, D_MODEL, NHEAD, NUM_DECODER_LAYERS, DIM_FEEDFORWARD, MAX_EXERCISES_PER_DAY = 18, 512, 8, 6, 2048, 20
 workout_model = WorkoutGenerationTransformer(
     INPUT_DIM, D_MODEL, NHEAD, NUM_DECODER_LAYERS,
     DIM_FEEDFORWARD, VOCAB_SIZE, MAX_EXERCISES_PER_DAY
 ).to(DEVICE)
-workout_model.load_state_dict(torch.load('trainium_sota_transformer_model.pth', map_location=DEVICE, weights_only=True))
+workout_model.load_state_dict(torch.load('fast_api_app/trainium_sota_transformer_model.pth', map_location=DEVICE, weights_only=True))
 workout_model.eval()
 print("✅ Workout Generation Model loaded.")
 print("\n--- Trainium is ready ---")

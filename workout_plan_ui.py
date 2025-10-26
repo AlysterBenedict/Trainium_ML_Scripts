@@ -84,9 +84,9 @@ class WorkoutGenerationTransformer(nn.Module):
         return output
 
 # --- Load the saved artifacts ---
-production_scaler = joblib.load('scaler.pkl')
-production_encoder = joblib.load('encoder.pkl')
-production_tokenizer = PyTorchTokenizer.load_tokenizer('tokenizer.json')
+production_scaler = joblib.load('fast_api_app/scaler.pkl')
+production_encoder = joblib.load('fast_api_app/encoder.pkl')
+production_tokenizer = PyTorchTokenizer.load_tokenizer('fast_api_app/tokenizer.json')
 vocab_size = production_tokenizer.vocab_size
 
 # Define model parameters (must match the trained model)
@@ -102,7 +102,7 @@ production_model = WorkoutGenerationTransformer(
     INPUT_DIM, D_MODEL, NHEAD, NUM_DECODER_LAYERS,
     DIM_FEEDFORWARD, vocab_size, MAX_EXERCISES_PER_DAY
 ).to(device)
-production_model.load_state_dict(torch.load('trainium_sota_transformer_model.pth', map_location=device, weights_only=True))
+production_model.load_state_dict(torch.load('fast_api_app/trainium_sota_transformer_model.pth', map_location=device, weights_only=True))
 production_model.eval()
 
 print("✅ All production artifacts loaded successfully.")
@@ -234,4 +234,3 @@ with gr.Blocks(theme=gr.themes.Soft(), title="Trainium AI Coach") as demo:
 
 if __name__ == "__main__":
     demo.launch(share=True)
-
