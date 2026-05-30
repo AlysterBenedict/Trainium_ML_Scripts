@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAINIUM - System Architecture & Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0c0b09;
+            color: #e6e1e5;
+        }
+
+        .m3-container {
+            background: rgba(28, 27, 31, 0.45);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(230, 186, 68, 0.25);
+            border-radius: 36px;
+            box-shadow: 0 28px 56px rgba(0, 0, 0, 0.6), 
+                        0 0 80px rgba(230, 186, 68, 0.03);
+        }
+
+        .m3-card {
+            background: rgba(43, 41, 48, 0.6);
+            border: 1px solid rgba(230, 186, 68, 0.15);
+            border-radius: 24px;
+            transition: transform 400ms cubic-bezier(0.2, 0, 0, 1), 
+                        box-shadow 400ms cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .m3-card:hover {
+            transform: scale(1.015) translateY(-2px);
+            box-shadow: 0 12px 24px rgba(230, 186, 68, 0.12);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-feature-settings: "ss01" on, "ss02" on;
+            background: linear-gradient(135deg, #f6e0a4 0%, #e6ba44 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .architecture-wrapper {
+            background: rgba(15, 14, 18, 0.5);
+            border: 1px solid rgba(230, 186, 68, 0.1);
+            border-radius: 28px;
+            padding: 32px;
+            overflow-x: auto;
+        }
+
+        svg {
+            width: 100%;
+            display: block;
+            height: auto;
+        }
+
+        .layer-title {
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            fill: #e6ba44;
+            opacity: 0.85;
+        }
+
+        .component-title {
+            font-size: 13px;
+            font-weight: 600;
+            fill: #ffffff;
+            letter-spacing: -0.01em;
+        }
+
+        .component-sub {
+            font-size: 11px;
+            font-weight: 500;
+            fill: #f6e0a4;
+        }
+
+        .component-detail {
+            font-size: 10px;
+            fill: #cac4d0;
+            font-weight: 400;
+        }
+
+        .flow-text {
+            font-size: 9.5px;
+            font-weight: 600;
+            fill: #e6ba44;
+            letter-spacing: 0.04em;
+        }
+
+        .card-node {
+            transition: transform 400ms cubic-bezier(0.2, 0, 0, 1), 
+                        filter 400ms cubic-bezier(0.2, 0, 0, 1);
+            cursor: pointer;
+        }
+
+        .card-node:hover {
+            transform: scale(1.025) translateY(-2px);
+            filter: drop-shadow(0 16px 24px rgba(230, 186, 68, 0.18));
+        }
+
+        @keyframes m3-fluid-dash {
+            to {
+                stroke-dashoffset: -32;
+            }
+        }
+
+        .data-flow {
+            stroke: #e6ba44;
+            stroke-width: 2;
+            stroke-dasharray: 8, 5;
+            animation: m3-fluid-dash 1s linear infinite;
+            filter: drop-shadow(0 0 6px rgba(230, 186, 68, 0.35));
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="container mx-auto m3-container p-6 md:p-12 space-y-12">
+        
+        <header class="text-center">
+            <h1>TRAINIUM</h1>
+        </header>
+
+        <main class="space-y-12">
+            
+            <section id="introduction" class="text-center m3-card p-8">
+                <h2 class="text-3xl font-bold text-[#e6ba44] mb-4">Revolutionizing Personal Fitness</h2>
+                <p class="max-w-3xl mx-auto text-[#cac4d0] mb-8">This project combines computer vision, machine learning, and cloud technology to create a smart fitness companion. The system provides real-time exercise form correction and personalized workout plans, all tracked and managed through a seamless mobile and wearable experience.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg(28,27,32,0.6) border border-rgba(230,186,68,0.2) p-6 rounded-2xl">
+                        <div class="text-4xl font-bold text-[#e6ba44] mb-1">33</div>
+                        <div class="text-sm text-[#cac4d0]">Body Landmarks Tracked</div>
+                    </div>
+                    <div class="bg(28,27,32,0.6) border border-rgba(230,186,68,0.2) p-6 rounded-2xl">
+                        <div class="text-4xl font-bold text-[#e6ba44] mb-1">100%</div>
+                        <div class="text-sm text-[#cac4d0]">Personalized Plans</div>
+                    </div>
+                    <div class="bg(28,27,32,0.6) border border-rgba(230,186,68,0.2) p-6 rounded-2xl">
+                        <div class="text-4xl font-bold text-[#e6ba44] mb-1">Real-Time</div>
+                        <div class="text-sm text-[#cac4d0]">Corrective Feedback</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="workflow-pipeline">
+                <div class="architecture-wrapper">
+                    <svg viewBox="0 0 1420 840" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <filter id="m3-elevation-shadow" x="-15%" y="-15%" width="130%" height="130%">
+                                <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6"/>
+                            </filter>
+                            
+                            <linearGradient id="m3-container-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="rgba(43, 41, 48, 0.85)"/>
+                                <stop offset="100%" stop-color="rgba(29, 27, 32, 0.6)"/>
+                            </linearGradient>
+
+                            <linearGradient id="m3-lane-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="rgba(230, 186, 68, 0.04)"/>
+                                <stop offset="100%" stop-color="rgba(29, 27, 32, 0.1)"/>
+                            </linearGradient>
+
+                            <marker id="m3-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 7 5 L 0 8.5 z" fill="#e6ba44" />
+                            </marker>
+                        </defs>
+
+                        <rect x="30" y="40" width="1360" height="145" rx="24" fill="url(#m3-lane-gradient)" stroke="rgba(230, 186, 68, 0.08)" stroke-width="1"/>
+                        <rect x="30" y="215" width="1360" height="185" rx="24" fill="url(#m3-lane-gradient)" stroke="rgba(230, 186, 68, 0.08)" stroke-width="1"/>
+                        <rect x="30" y="430" width="1360" height="205" rx="24" fill="url(#m3-lane-gradient)" stroke="rgba(230, 186, 68, 0.08)" stroke-width="1"/>
+                        <rect x="30" y="665" width="1360" height="140" rx="24" fill="url(#m3-lane-gradient)" stroke="rgba(230, 186, 68, 0.08)" stroke-width="1"/>
+
+                        <text x="55" y="68" class="layer-title">PRESENTATION LAYER</text>
+                        <text x="55" y="243" class="layer-title">APPLICATION LAYER</text>
+                        <text x="55" y="458" class="layer-title">MACHINE LEARNING LAYER</text>
+                        <text x="55" y="693" class="layer-title">DATA & BACKEND LAYER</text>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="80" y="85" width="220" height="70" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.4)" stroke-width="1.5"/>
+                            <text x="190" y="114" text-anchor="middle" class="component-title">Workout Tracker UI</text>
+                            <text x="190" y="134" text-anchor="middle" class="component-sub">Kotlin + CameraX</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="80" y="255" width="220" height="125" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="190" y="282" text-anchor="middle" class="component-title">Form Correction</text>
+                            <text x="190" y="302" text-anchor="middle" class="component-sub">Real-time Analysis</text>
+                            <text x="105" y="325" class="component-detail">• Audio Feedback</text>
+                            <text x="105" y="341" class="component-detail">• Visual Guides</text>
+                            <text x="105" y="357" class="component-detail">• Angle Calculation</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="80" y="475" width="210" height="130" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="185" y="502" text-anchor="middle" class="component-title">Pose Estimation Model</text>
+                            <text x="185" y="522" text-anchor="middle" class="component-sub">MediaPipe Landmarker</text>
+                            <text x="102" y="547" class="component-detail">• 33 Body Landmarks</text>
+                            <text x="102" y="563" class="component-detail">• TensorFlow Lite</text>
+                            <text x="102" y="579" class="component-detail">• On-Device Frame Sync</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="315" y="475" width="210" height="130" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="420" y="502" text-anchor="middle" class="component-title">Exercise Logic Engine</text>
+                            <text x="420" y="522" text-anchor="middle" class="component-sub">Python Native Bridge</text>
+                            <text x="338" y="547" class="component-detail">• Vector Mathematics</text>
+                            <text x="338" y="563" class="component-detail">• Kinematic Assertions</text>
+                            <text x="338" y="579" class="component-detail">• Repetition Analytics</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="560" y="85" width="220" height="70" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.4)" stroke-width="1.5"/>
+                            <text x="670" y="114" text-anchor="middle" class="component-title">Workout Planner UI</text>
+                            <text x="670" y="134" text-anchor="middle" class="component-sub">Plan Generation Engine</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="560" y="255" width="220" height="125" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="670" y="282" text-anchor="middle" class="component-title">Workout Generator</text>
+                            <text x="670" y="302" text-anchor="middle" class="component-sub">Personalized Plans</text>
+                            <text x="585" y="325" class="component-detail">• Phenotype Assessment</text>
+                            <text x="585" y="341" class="component-detail">• Objective Projections</text>
+                            <text x="585" y="357" class="component-detail">• Scaling Routines</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="560" y="475" width="220" height="130" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="670" y="502" text-anchor="middle" class="component-title">Body Type Analysis</text>
+                            <text x="670" y="522" text-anchor="middle" class="component-sub">ML Classification Model</text>
+                            <text x="585" y="547" class="component-detail">• Somatotype Metrics</text>
+                            <text x="585" y="563" class="component-detail">• Clustering Inference</text>
+                            <text x="585" y="579" class="component-detail">• Adaptive Benchmarking</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="840" y="85" width="220" height="70" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.4)" stroke-width="1.5"/>
+                            <text x="950" y="114" text-anchor="middle" class="component-title">Progress Dashboard</text>
+                            <text x="950" y="134" text-anchor="middle" class="component-sub">Charts & Analytics</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="840" y="255" width="220" height="125" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="950" y="282" text-anchor="middle" class="component-title">Data Synchronization</text>
+                            <text x="950" y="302" text-anchor="middle" class="component-sub">Firebase Integration</text>
+                            <text x="865" y="325" class="component-detail">• Profile Orchestration</text>
+                            <text x="865" y="341" class="component-detail">• Offline Event Logging</text>
+                            <text x="865" y="357" class="component-detail">• Structural Telemetry</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="1120" y="85" width="220" height="70" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.4)" stroke-width="1.5"/>
+                            <text x="1230" y="114" text-anchor="middle" class="component-title">User Auth UI</text>
+                            <text x="1230" y="134" text-anchor="middle" class="component-sub">Google Sign-In</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="1120" y="255" width="220" height="125" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="1230" y="282" text-anchor="middle" class="component-title">User Management</text>
+                            <text x="1230" y="302" text-anchor="middle" class="component-sub">Authentication</text>
+                            <text x="1145" y="325" class="component-detail">• Handshake Verification</text>
+                            <text x="1145" y="341" class="component-detail">• Token Cryptography</text>
+                            <text x="1145" y="357" class="component-detail">• Core Onboarding</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="80" y="700" width="220" height="75" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="190" y="728" text-anchor="middle" class="component-title">Firebase Analytics</text>
+                            <text x="190" y="748" text-anchor="middle" class="component-sub">Usage Metrics</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="340" y="700" width="220" height="75" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="440" y="728" text-anchor="middle" class="component-title">Cloud Storage</text>
+                            <text x="440" y="748" text-anchor="middle" class="component-sub">Media Files</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="840" y="700" width="220" height="75" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="950" y="728" text-anchor="middle" class="component-title">Cloud Firestore</text>
+                            <text x="950" y="748" text-anchor="middle" class="component-sub">NoSQL Database</text>
+                        </g>
+
+                        <g class="card-node" filter="url(#m3-elevation-shadow)">
+                            <rect x="1120" y="700" width="220" height="75" rx="20" fill="url(#m3-container-gradient)" stroke="rgba(230, 186, 68, 0.2)" stroke-width="1.2"/>
+                            <text x="1230" y="728" text-anchor="middle" class="component-title">Firebase Auth</text>
+                            <text x="1230" y="748" text-anchor="middle" class="component-sub">User Identity</text>
+                        </g>
+
+                        <path d="M 135 155 L 135 475" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="142" y="210" class="flow-text">Camera Feed</text>
+                        
+                        <path d="M 290 535 L 315 535" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="293" y="523" class="flow-text">Vectors</text>
+                        
+                        <path d="M 420 475 L 420 405 L 245 405 L 245 380" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="312" y="397" class="flow-text">Validation</text>
+
+                        <path d="M 245 255 L 245 155" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="251" y="210" class="flow-text">UI Alerts</text>
+
+                        <path d="M 645 155 L 645 255" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="578" y="205" class="flow-text">Init Call</text>
+
+                        <path d="M 645 380 L 645 475" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="590" y="425" class="flow-text">Metrics</text>
+
+                        <path d="M 725 475 L 725 380" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="731" y="425" class="flow-text">Parsing</text>
+
+                        <path d="M 725 255 L 725 155" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="731" y="205" class="flow-text">Output Plan</text>
+
+                        <path d="M 950 155 L 950 255" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="956" y="205" class="flow-text">Payloads</text>
+
+                        <path d="M 950 380 L 950 700" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="956" y="630" class="flow-text">Sync Events</text>
+
+                        <path d="M 1230 155 L 1230 255" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="1236" y="205" class="flow-text">Handshake</text>
+
+                        <path d="M 1230 380 L 1230 700" class="data-flow" fill="none" marker-end="url(#m3-arrow)"/>
+                        <text x="1236" y="630" class="flow-text">JWT Tokens</text>
+                    </svg>
+                </div>
+            </section>
+
+            <section id="architecture-details">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <div class="m3-card p-6">
+                        <h3 class="text-2xl font-bold text-[#e6ba44] mb-4">On-Device Intelligence</h3>
+                        <p class="text-[#cac4d0] mb-6">The core of the real-time feedback loop runs directly on the user's device for maximum speed and privacy. The process involves capturing video, running a sophisticated pose estimation model, and applying custom exercise logic to analyze the user's form instantly.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="p-4 bg-[rgba(255,255,255,0.03)] border border-rgba(230,186,68,0.1) rounded-xl">
+                                <h4 class="font-semibold text-[#f6e0a4]">MediaPipe Pose Landmarker</h4>
+                                <p class="text-sm text-[#cac4d0]">A TFLite model that processes video frames to detect 33 key body landmarks.</p>
+                            </div>
+                            <div class="p-4 bg-[rgba(255,255,255,0.03)] border border-rgba(230,186,68,0.1) rounded-xl">
+                                <h4 class="font-semibold text-[#f6e0a4]">Exercise Logic Module</h4>
+                                <p class="text-sm text-[#cac4d0]">Calculates joint angles from landmark data and compares them against correct form models.</p>
+                            </div>
+                            <div class="p-4 bg-[rgba(255,255,255,0.03)] border border-rgba(230,186,68,0.1) rounded-xl">
+                                <h4 class="font-semibold text-[#f6e0a4]">Feedback Generator</h4>
+                                <p class="text-sm text-[#cac4d0]">Triggers audio cues and visual overlays based on the form analysis.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="m3-card p-6">
+                        <h3 class="text-2xl font-bold text-[#e6ba44] mb-4">Cloud Data Composition</h3>
+                        <p class="text-[#cac4d0] mb-6">All user data is securely stored and managed in Google's Cloud Firestore. This central database enables progress tracking, workout history, and synchronization across devices. The data is structured to support the app's core features.</p>
+                        <div class="chart-container">
+                            <canvas id="firestoreDataChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="tech-stack">
+                <div class="max-w-full mx-auto">
+                    <div class="m3-card p-8 border-t-4 border-[#e6ba44]">
+                        <h3 class="text-3xl font-bold text-[#ffffff] mb-1">Alyster</h3>
+                        <p class="font-semibold text-[#e6ba44] mb-6">Project & Tech Lead</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            
+                            <div class="space-y-2 text-sm bg-[rgba(255,255,255,0.02)] p-4 rounded-xl border border-rgba(230,186,68,0.1)">
+                                <h4 class="font-bold text-[#f6e0a4] mb-2 flex items-center">
+                                    <span class="text-xl mr-2">🧠</span> Machine Learning
+                                </h4>
+                                <ul class="space-y-2 text-[#cac4d0]">
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Primary Tool:</strong> Python</div></li>
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Core Libs:</strong> MediaPipe, OpenCV, NumPy</div></li>
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Focus:</strong> Prototyping pose estimation and exercise logic.</div></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="space-y-2 text-sm bg-[rgba(255,255,255,0.02)] p-4 rounded-xl border border-rgba(230,186,68,0.1)">
+                                <h4 class="font-bold text-[#f6e0a4] mb-2 flex items-center">
+                                    <span class="text-xl mr-2">📱</span> Android Development
+                                </h4>
+                                <ul class="space-y-2 text-[#cac4d0]">
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Primary Tool:</strong> Kotlin & Android Studio</div></li>
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Core Libs:</strong> CameraX, TFLite Vision</div></li>
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Focus:</strong> Building the UI and integrating the ML model.</div></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="space-y-2 text-sm bg-[rgba(255,255,255,0.02)] p-4 rounded-xl border border-rgba(230,186,68,0.1)">
+                                <h4 class="font-bold text-[#f6e0a4] mb-2 flex items-center">
+                                    <span class="text-xl mr-2">☁️</span> Backend & Data Systems
+                                </h4>
+                                <ul class="space-y-2 text-[#cac4d0]">
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Primary Tool:</strong> Firebase Console</div></li>
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Core Services:</strong> Auth, Cloud Firestore</div></li>
+                                    <li class="flex items-start"><span class="text-[#e6ba44] mr-2">🗲</span><div><strong class="text-white font-medium">Focus:</strong> User data management and cloud persistence.</div></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <script>
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            return Array.isArray(label) ? label.join(' ') : label;
+        };
+
+        const firestoreCtx = document.getElementById('firestoreDataChart').getContext('2d');
+        const firestoreDataChart = new Chart(firestoreCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['User Profiles & Goals', 'Workout History Logs', 'Biometric Data Syncs'],
+                datasets: [{
+                    label: 'Data Distribution',
+                    data: [40, 35, 25],
+                    backgroundColor: [
+                        '#e6ba44',
+                        '#f6e0a4',
+                        '#9c8243'
+                    ],
+                    borderColor: '#1c1b1f',
+                    borderWidth: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#e6e1e5',
+                            font: {
+                                size: 13,
+                                family: "'Inter', sans-serif"
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
+                    }
+                },
+                cutout: '65%'
+            }
+        });
+    </script>
+</body>
+</html>
