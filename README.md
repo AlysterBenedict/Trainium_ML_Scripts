@@ -1,4 +1,4 @@
-# 🤖 AI_GYM – AI-Powered Fitness Coach  
+#  AI_GYM – AI-Powered Fitness Coach  
 
 **AI_GYM** is a high-performance, AI-driven fitness ecosystem that delivers **hyper-personalized coaching, real-time form correction, and holistic progress tracking**. It leverages computer vision (MediaPipe & OpenCV) and generative deep learning (Decoder-only Transformer) to transform raw biometric metrics into tailored training plans and safe workouts.
 
@@ -6,7 +6,7 @@
 
 ---
 
-## 🚀 Project Vision & Core Features
+##  Project Vision & Core Features
 
 ### 1. Intelligent Form Correction & Guidance
 * **Real-Time Pose Estimation:** BlazePose GHUM 3D tracks 33 standard human keypoints.
