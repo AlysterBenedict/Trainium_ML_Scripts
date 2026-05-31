@@ -1,4 +1,22 @@
-# biometric_estimator.py
+# =====================================================================================
+# Biometric Metric Estimator Module
+# =====================================================================================
+# USE CASE:
+# Processes raw frontal and side photos to automatically estimate 15 distinct human body
+# measurements (chest, waist, hips, biceps, thighs, height, weight, etc.). It performs:
+# 1. Background removal using the 'rembg' package.
+# 2. Canny-like binary silhouette extraction (white foreground, black background) using OpenCV.
+# 3. Size normalization (resize to 224x224) and PyTorch Tensor transforms.
+# 4. Neural Network regression inference utilizing a dual-branch EfficientNet-B4 pipeline.
+#
+# SUB-MODULES & ARTIFACTS CALLED BY THIS FILE:
+# - best_bodym_model.pth: Loaded via torch.load inside the BiometricEstimator initializer 
+#   to load trained EfficientNet-B4 regression parameters.
+#
+# CALLED / IMPORTED BY:
+# - fast_api_app/main.py (Core REST endpoint router)
+# - Pipeline Testing/pipeline_testing_app.py (Evaluation Gradio application)
+# =====================================================================================
 
 import torch
 import torch.nn as nn

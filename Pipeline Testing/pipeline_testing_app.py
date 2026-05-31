@@ -1,3 +1,4 @@
+#Full pipeline functionality testing( only metrics estimation, workout generation and llm response)
 import gradio as gr
 import pandas as pd
 import numpy as np

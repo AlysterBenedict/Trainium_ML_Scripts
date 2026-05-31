@@ -1,3 +1,32 @@
+# =====================================================================================
+# SOTA Transformer Workout Generator - Model Training Pipeline
+# =====================================================================================
+# PURPOSE:
+# This script trains a State-of-the-Art (SOTA) Decoder-Only Transformer network to generate
+# personalized 30-day workout plans. It ingests biometrics and goal inputs to map profiles
+# to autoregressively generated sequence chains of daily exercise lists.
+#
+# CORE PIPELINE & ARCHITECTURE:
+# 1. Data Preprocessing:
+#    * Ingests 'trainium_production_dataset_100k.csv'.
+#    * One-hot encodes categorical biometrics (Gender, Goal, Level) via sklearn OneHotEncoder.
+#    * Standardizes numerical attributes (Age, BMI, weight, etc.) via sklearn StandardScaler.
+#    * Tokenizes 30 days of workouts using a custom PyTorchTokenizer with padded sequence masks.
+# 2. Deep Learning Model (WorkoutGenerationTransformer):
+#    * Extends nn.Module with a profile linear projection and a causal token embedding branch.
+#    * Incorporates PositionalEncoding to retain sequential temporal context (Days 1 to 30).
+#    * Leverages a TransformerDecoder with lookahead self-attention masking.
+# 3. High-Performance Optimization:
+#    * Utilizes torch.amp.autocast (Automatic Mixed Precision) for memory efficiency.
+#    * virtualizes large batch sizes using Gradient Accumulation (accumulation_steps=4).
+#    * Employs Gradient Clipping to avoid exploding/vanishing gradients.
+# 4. Output Artifacts Produced:
+#    * 'trainium_sota_transformer_model.pth' - Best validation PyTorch weights.
+#    * 'scaler.pkl' - Pretrained StandardScaler statistics.
+#    * 'encoder.pkl' - Pretrained OneHotEncoder categories.
+#    * 'tokenizer.json' - Vocabulary index mappings for inference.
+# =====================================================================================
+
 import json
 import time
 import math

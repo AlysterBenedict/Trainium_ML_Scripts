@@ -1,3 +1,31 @@
+# =====================================================================================
+# Synthetic Dataset Generator for SOTA Transformer Model Training
+# =====================================================================================
+# PURPOSE:
+# This script programmatically synthesizes a high-quality, production-grade dataset of 100,000
+# user biometrics and correlated progressive 30-day workout plans. The generated CSV
+# ('trainium_production_dataset_100k.csv') serves as the primary training dataset for the
+# SOTA Transformer workout generation model.
+#
+# CORE FUNCTIONALITY & ENGINE RULES:
+# 1. Master Exercise DB: Maps exercises from our OpenCV/MediaPipe tracking registry with
+#    associated muscle groups, types, and difficulty tiers (1: Beginner, 2: Intermediate, 3: Advanced).
+# 2. Level-Dependent Volume Scaling: Customizes the number of daily exercises based on user level
+#    (Beginner: 8-15 reps/exercises, Intermediate: 10-18, Advanced: 12-20).
+# 3. Dynamic Weekly Progression: Slowly increases exercise volume over the 4-week cycle to
+#    simulate progressive overload.
+# 4. Deload Week Simulation: During Week 3, exercise volume is scaled down by ~35% (retaining 65% volume)
+#    to model authentic athletic recovery periods.
+# 5. Goal-Based Weekly Splits: Assigns daily workout schedules matching specific user goals:
+#    * Gain Muscle ➔ Push/Pull/Legs split.
+#    * Lose Weight ➔ Full Body Strength, HIIT, Core/Cardio splits.
+#    * Gain Stamina ➔ Focused Cardio, HIIT, and Cardio intervals.
+#    * General Fitness ➔ Balanced Upper/Lower/Full-body splits.
+# 6. Biometric Correlation Modeling: Utilizes NumPy to synthesize realistic, physiologically
+#    correlated body measurements (Chest, Waist, Hips, Thighs, Biceps) modeled as a mathematical
+#    function of the user's height, weight, and random variance.
+# =====================================================================================
+
 import csv
 import random
 import pandas as pd

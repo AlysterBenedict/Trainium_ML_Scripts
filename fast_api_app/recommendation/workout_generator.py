@@ -1,4 +1,26 @@
-# workout_generator.py
+# =====================================================================================
+# Autoregressive Workout Generation Module
+# =====================================================================================
+# USE CASE:
+# Generates high-quality, customized 30-day physical training routines based on a user's
+# biological profile, goal, and experience level. It performs:
+# 1. Continuous biometric scaling (StandardScaler) and categorization (OneHotEncoder).
+# 2. Daily token mapping utilizing a custom-loaded PyTorchTokenizer.
+# 3. Autoregressive sequence forecasting utilizing a pre-trained Decoder-Only Transformer.
+# 4. Top-K sampling (k=10) on vocabulary distributions to introduce variety and remove 
+#    duplicate/redundant exercises on consecutive days.
+#
+# SUB-MODULES & ARTIFACTS CALLED BY THIS FILE:
+# - tokenizer_path (tokenizer.json): Loaded to map generated numeric indexes to text labels.
+# - scaler_path (scaler.pkl): Loaded to standardize numeric biometrics using StandardScaler statistics.
+# - encoder_path (encoder.pkl): Loaded to encode categorical goals and levels using OneHotEncoder targets.
+# - model_path (trainium_sota_transformer_model.pth): Loaded to apply trained decoder weights.
+#
+# CALLED / IMPORTED BY:
+# - fast_api_app/main.py (Core REST endpoint router)
+# - Workout generator training/manual_workout_plan_ui.py (Manual Gradio UI)
+# - Pipeline Testing/pipeline_testing_app.py (Multimodal evaluation application)
+# =====================================================================================
 
 import torch
 import torch.nn as nn

@@ -1,3 +1,32 @@
+# =====================================================================================
+# FastAPI Server Entrypoint File
+# =====================================================================================
+# USE CASE:
+# Acts as the production REST API gateway for the AI Gym ecosystem. It initializes 
+# pre-trained neural networks and preprocessors, defines Pydantic payload models, 
+# and routes external client HTTP requests for biometric predictions and plan generation.
+#
+# ENDPOINTS DEFINED:
+# - GET  /                  : Server health check / greeting.
+# - POST /predict_biometrics: Receives front/side photos, extracts silhouettes, and returns estimated dimensions.
+# - POST /generate_workout  : Receives biometric details and targets, and autoregressively generates a 30-day program.
+#
+# SUB-MODULES & ARTIFACTS CALLED BY THIS FILE:
+# 1. recommendation.biometric_estimator.BiometricEstimator: Used to process raw user photos and
+#    estimate 15 key body measurements (via 'best_bodym_model.pth').
+# 2. recommendation.workout_generator.WorkoutGenerator: Used to ingest biometrics and autoregressively
+#    generate the progressive 30-day workout plan sequence.
+# 3. best_bodym_model.pth: Loaded via BiometricEstimator to supply neural weights for silhouette regression.
+# 4. trainium_sota_transformer_model.pth: Loaded via WorkoutGenerator to supply neural weights for generation.
+# 5. tokenizer.json: Loaded via WorkoutGenerator to decode forecasted tokens into exercise names.
+# 6. scaler.pkl: Loaded via WorkoutGenerator to scale incoming profile values (StandardScaler).
+# 7. encoder.pkl: Loaded via WorkoutGenerator to encode categorical goals/levels (OneHotEncoder).
+#
+# CALLED / IMPORTED BY:
+# - This file is executed directly as the server entrypoint.
+# - Command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# =====================================================================================
+
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from pydantic import BaseModel
 import torch

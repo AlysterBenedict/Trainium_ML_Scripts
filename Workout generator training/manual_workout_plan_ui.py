@@ -1,3 +1,21 @@
+# =====================================================================================
+# Standalone Manual Workout Plan Generator UI
+# =====================================================================================
+# PURPOSE & USE CASE:
+# This script launches a lightweight Gradio interface to generate 30-day workout plans
+# using a Decoder-Only Transformer model.
+#
+# COMPARED TO pipeline_testing_app.py:
+# 1. Manual Input Only: Unlike 'pipeline_testing_app.py' (which automatically extracts
+#    body measurements using computer vision models from uploaded photos), this script
+#    requires you to manually key in measurements via sliders and dropdowns.
+# 2. Lightweight & Fast: It does NOT load the heavy EfficientNet-B4 computer vision models
+#    or image-processing libraries like OpenCV and rembg. This drastically reduces loading
+#    time, system memory usage, and GPU constraints.
+# 3. Focus: Dedicated purely to validating and debugging the sequence generation outputs
+#    of the Transformer network under direct parameter control.
+# =====================================================================================
+
 import gradio as gr
 import pandas as pd
 import numpy as np
