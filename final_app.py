@@ -14,7 +14,7 @@ import rembg
 from PIL import Image
 import io
 from torchvision import models, transforms
-from groq import Groq
+import requests
 import tempfile
 
 # --- 1. Global Setup: Load All Models and Artifacts ---
@@ -282,7 +282,8 @@ def get_ai_narrative(user_profile, workout_plan_df, progress=gr.Progress()):
     system_prompt = (
         "You are 'Trainium', an expert AI fitness coach. You are friendly, motivating, and knowledgeable. "
         "Your task is to provide a comprehensive, easy-to-follow, and inspiring guide based on the user's profile and generated workout plan. "
-        "Follow the user's requested structure precisely. Use markdown for clear formatting (headings, bold text, lists)."
+        "Follow the user's requested structure precisely. Use markdown for clear formatting (headings, bold text, lists).\n"
+        "CRITICAL: Keep your internal thinking/reasoning process extremely brief (under 50 tokens) and get straight to the final response content."
     )
     
     ### MODIFIED ###: Changed the prompt to remove the hardcoded example and give better instructions.
@@ -291,7 +292,7 @@ def get_ai_narrative(user_profile, workout_plan_df, progress=gr.Progress()):
         f"And here is the 30-day workout plan you generated for me:\\n{plan_str}\\n\\n"
         "Please generate a detailed response following this exact structure in order:\n"
         "i) A welcome message to Trainium and a brief, personalized introduction to how the AI model works.\n"
-        "ii) An explanation of my current body state and fitness level based on my profile. IMPORTANT: Do not mention my raw weight, height and BMI anywhere in the output. Instead, list my other body measurements (chest, waist, hip, thigh, bicep) from the profile provided. For each measurement, state its value and compare it to general averages for my stated gender (e.g., 'average', 'above average'). Format this as a list, for example: '+ Chest: [value from profile] cm ([comparison])'.\n"
+        "ii) An explanation of my current body state and fitness level based on my profile. IMPORTANT: Mention my raw weight, height and BMI in the output. Also, list my other body measurements (chest, waist, hip, thigh, bicep) from the profile provided. For each measurement, state its value and compare it to general averages for my stated gender (e.g., 'average', 'above average'). Format this as a list, for example: '+ Chest: [value from profile] cm ([comparison])'.\n"
         "iii) Your suggestion for my ideal goal metrics. This section MUST include specific numerical targets for 'Target Weight', 'Target BMI', and 'Target Body Fat Percentage'.(do not compare with the original weights)\n"
         "iv) Detailed pointwise advice on how to achieve this goal using the provided plan.\n"
         "v) Suggestions for lifestyle changes (like sleep, hydration, etc.).\n"
@@ -302,25 +303,28 @@ def get_ai_narrative(user_profile, workout_plan_df, progress=gr.Progress()):
     try:
         progress(0.5, desc="Generating detailed guide...")
 
-        # Load API key from environment variable instead of hardcoding it
-        api_key = os.environ.get("GROQ_API_KEY")
-        if not api_key:
-            raise gr.Error("GROQ_API_KEY environment variable not set.")
-        client = Groq(api_key=api_key)
-        
-        chat_completion = client.chat.completions.create(
-            messages=[
+        url = "http://192.168.1.6:1234/v1/chat/completions"
+        headers = {
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "google/gemma-4-26b-a4b",
+            "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            model="llama-3.1-8b-instant",
-            temperature=0.7,
-        )
-        return chat_completion.choices[0].message.content
+            "temperature": 0.7,
+            "max_tokens": 8192
+        }
+        
+        response = requests.post(url, headers=headers, json=payload, timeout=120)
+        response.raise_for_status()
+        result_json = response.json()
+        return result_json['choices'][0]['message']['content']
     except Exception as e:
-        error_message = f"An error occurred while communicating with the AI. Please check your API key and network connection. Details: {e}"
+        error_message = f"An error occurred while communicating with the local AI. Please check LM Studio connection at http://192.168.1.6:1234 and make sure model 'google/gemma-4-26b-a4b' is loaded. Details: {e}"
         print(error_message)
-        raise gr.Error(error_message)
+        return f"### ⚠️ Connection Error\n\n{error_message}"
 
 
 # --- 4. Create and Launch the Gradio Interface ---
